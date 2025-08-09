@@ -278,6 +278,12 @@ interface SashItem {
   sash: Sash;
 }
 
+interface SashDragSnapState {
+  readonly index: number;
+  readonly limitDelta: number;
+  readonly size: number;
+}
+
 interface SashDragState {
   index: number;
   start: number;
@@ -285,6 +291,8 @@ interface SashDragState {
   sizes: number[];
   minDelta: number;
   maxDelta: number;
+  snapBefore?: SashDragSnapState;
+  snapAfter?: SashDragSnapState;
 }
 
 export class SplitView extends EventEmitter implements Disposable {
@@ -732,6 +740,36 @@ export class SplitView extends EventEmitter implements Disposable {
 
     const minDelta = this.getMinDelta(upIndexes, downIndexes, sizes);
     const maxDelta = this.getMaxDelta(upIndexes, downIndexes, sizes);
+    
+    let snapBefore: SashDragSnapState | undefined;
+    let snapAfter: SashDragSnapState | undefined;
+    
+    const snapBeforeIndex = this.findFirstSnapIndex(upIndexes);
+    const snapAfterIndex = this.findFirstSnapIndex(downIndexes);
+    
+    if (typeof snapBeforeIndex === "number") {
+      const viewItem = this.viewItems[snapBeforeIndex];
+      const halfSize = Math.floor(viewItem.minimumSize / 2);
+      snapBefore = {
+        index: snapBeforeIndex,
+        limitDelta: viewItem.visible
+          ? minDelta - halfSize
+          : minDelta + halfSize,
+        size: viewItem.size,
+      };
+    }
+    
+    if (typeof snapAfterIndex === "number") {
+      const viewItem = this.viewItems[snapAfterIndex];
+      const halfSize = Math.floor(viewItem.minimumSize / 2);
+      snapAfter = {
+        index: snapAfterIndex,
+        limitDelta: viewItem.visible
+          ? maxDelta + halfSize
+          : maxDelta - halfSize,
+        size: viewItem.size,
+      };
+    }
 
     this.sashDragState = {
       index,
@@ -740,14 +778,16 @@ export class SplitView extends EventEmitter implements Disposable {
       sizes,
       minDelta,
       maxDelta,
+      snapBefore,
+      snapAfter,
     };
   }
 
   private onSashChange({ current }: SashEvent): void {
-    const { index, start, sizes, minDelta, maxDelta } = this.sashDragState!;
-    const delta = clamp(current - start, minDelta, maxDelta);
+    const { index, start, sizes, minDelta, maxDelta, snapBefore, snapAfter } = this.sashDragState!;
+    const delta = current - start;
 
-    this.resize(index, delta, sizes);
+    this.resize(index, delta, sizes, undefined, undefined, minDelta, maxDelta, snapBefore, snapAfter);
     this.distributeEmptySpace();
     this.layoutViews();
   }
@@ -794,13 +834,13 @@ export class SplitView extends EventEmitter implements Disposable {
     sizes?: number[],
     lowPriorityIndexes?: number[],
     highPriorityIndexes?: number[],
-  ): void {
+    overloadMinDelta: number = Number.NEGATIVE_INFINITY,
+    overloadMaxDelta: number = Number.POSITIVE_INFINITY,
+    snapBefore?: SashDragSnapState,
+    snapAfter?: SashDragSnapState,
+  ): number {
     if (index < 0 || index >= this.viewItems.length || this.viewItems.length === 0) {
-      return;
-    }
-
-    if (delta === 0) {
-      return;
+      return 0;
     }
 
     const upIndexes = range(index, -1, -1);
@@ -808,26 +848,80 @@ export class SplitView extends EventEmitter implements Disposable {
 
     if (highPriorityIndexes) {
       for (const priorityIndex of highPriorityIndexes) {
-        pushToEnd(upIndexes, priorityIndex);
-        pushToEnd(downIndexes, priorityIndex);
-      }
-    }
-
-    if (lowPriorityIndexes) {
-      for (const priorityIndex of lowPriorityIndexes) {
         pushToStart(upIndexes, priorityIndex);
         pushToStart(downIndexes, priorityIndex);
       }
     }
 
-    const currentSizes = sizes ?? this.viewItems.map((i) => i?.size || 0);
+    if (lowPriorityIndexes) {
+      for (const priorityIndex of lowPriorityIndexes) {
+        pushToEnd(upIndexes, priorityIndex);
+        pushToEnd(downIndexes, priorityIndex);
+      }
+    }
 
-    // Get the items and their current sizes
+    const currentSizes = sizes ?? this.viewItems.map((i) => i?.size || 0);
+    
     const upItems = upIndexes.map(i => this.viewItems[i]);
     const upSizes = upIndexes.map(i => currentSizes[i]);
-    
     const downItems = downIndexes.map(i => this.viewItems[i]);
     const downSizes = downIndexes.map(i => currentSizes[i]);
+    
+    const minDeltaUp = upIndexes.reduce(
+      (r, i) => r + (this.viewItems[i].minimumSize - currentSizes[i]),
+      0,
+    );
+    const maxDeltaUp = upIndexes.reduce(
+      (r, i) => r + (this.viewItems[i].maximumSize - currentSizes[i]),
+      0,
+    );
+    const maxDeltaDown =
+      downIndexes.length === 0
+        ? Number.POSITIVE_INFINITY
+        : downIndexes.reduce(
+            (r, i) => r + (currentSizes[i] - this.viewItems[i].minimumSize),
+            0,
+          );
+    const minDeltaDown =
+      downIndexes.length === 0
+        ? Number.NEGATIVE_INFINITY
+        : downIndexes.reduce(
+            (r, i) => r + (currentSizes[i] - this.viewItems[i].maximumSize),
+            0,
+          );
+    
+    const minDelta = Math.max(minDeltaUp, minDeltaDown, overloadMinDelta);
+    const maxDelta = Math.min(maxDeltaDown, maxDeltaUp, overloadMaxDelta);
+    
+    let snapped = false;
+    
+    if (snapBefore) {
+      const snapView = this.viewItems[snapBefore.index];
+      const visible = delta >= snapBefore.limitDelta;
+      snapped = visible !== snapView.visible;
+      snapView.setVisible(visible, snapBefore.size);
+    }
+    
+    if (!snapped && snapAfter) {
+      const snapView = this.viewItems[snapAfter.index];
+      const visible = delta < snapAfter.limitDelta;
+      snapped = visible !== snapView.visible;
+      snapView.setVisible(visible, snapAfter.size);
+    }
+    
+    if (snapped) {
+      return this.resize(
+        index,
+        delta,
+        sizes,
+        lowPriorityIndexes,
+        highPriorityIndexes,
+        overloadMinDelta,
+        overloadMaxDelta,
+      );
+    }
+    
+    delta = clamp(delta, minDelta, maxDelta);
 
     // Resize up items (they should increase when delta is positive)
     for (let i = 0, deltaUp = delta; i < upItems.length; i++) {
@@ -861,8 +955,7 @@ export class SplitView extends EventEmitter implements Disposable {
       item.size = size;
     }
 
-    this.distributeEmptySpace();
-    this.layoutViews();
+    return delta;
   }
 
   private distributeEmptySpace(lowPriorityIndexes?: number[]): void {
@@ -935,6 +1028,8 @@ export class SplitView extends EventEmitter implements Disposable {
       undefined,
       lowPriorityIndexes,
       highPriorityIndexes,
+      Number.NEGATIVE_INFINITY,
+      Number.POSITIVE_INFINITY,
     );
   }
 

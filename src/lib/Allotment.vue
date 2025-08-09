@@ -202,24 +202,44 @@ const initializeSplitView = () => {
     );
   }
 
-  if (initializeSizes && props.defaultSizes) {
+  // 获取容器实际大小
+  const containerRect = containerRef.value.getBoundingClientRect();
+  const containerSize = props.vertical ? containerRect.height : containerRect.width;
+  
+  // 设置 layoutService 的大小，以便百分比计算正确
+  layoutService.value.setSize(containerSize);
+  
+  // 如果没有提供 defaultSizes，根据子元素数量平均分配
+  let adjustedSizes = props.defaultSizes;
+  
+  if (!props.defaultSizes && splitViewViewRef.size > 0) {
+    // 没有默认大小时，平均分配空间
+    const sizePerPane = Math.floor(containerSize / splitViewViewRef.size);
+    adjustedSizes = Array(splitViewViewRef.size).fill(sizePerPane);
+    // 将剩余的像素添加到最后一个面板
+    adjustedSizes[adjustedSizes.length - 1] += containerSize - (sizePerPane * splitViewViewRef.size);
+    initializeSizes = true;
+    // 设置 previousKeys 即使没有 defaultSizes
+    previousKeys.value = childrenArray.value.map(
+      (child) => child.key as string,
+    );
+  } else if (props.defaultSizes) {
+    const defaultTotalSize = props.defaultSizes.reduce((a, b) => a + b, 0);
+    
+    // 如果 defaultSizes 总和与容器大小不同，按比例调整
+    if (containerSize > 0 && defaultTotalSize > 0 && Math.abs(containerSize - defaultTotalSize) > 1) {
+      const ratio = containerSize / defaultTotalSize;
+      adjustedSizes = props.defaultSizes.map(size => Math.round(size * ratio));
+    }
+    
     previousKeys.value = childrenArray.value.map(
       (child) => child.key as string,
     );
   }
 
-  // 获取容器实际大小
-  const containerRect = containerRef.value.getBoundingClientRect();
-  const containerSize = props.vertical ? containerRect.height : containerRect.width;
-  const defaultTotalSize = props.defaultSizes?.reduce((a, b) => a + b, 0) || 0;
+  // 清空之前的 views
+  views.value = [];
   
-  // 如果 defaultSizes 总和与容器大小不同，按比例调整
-  let adjustedSizes = props.defaultSizes;
-  if (containerSize > 0 && defaultTotalSize > 0 && Math.abs(containerSize - defaultTotalSize) > 1) {
-    const ratio = containerSize / defaultTotalSize;
-    adjustedSizes = props.defaultSizes?.map(size => Math.round(size * ratio));
-  }
-
   const options: SplitViewOptions = {
     orientation: props.vertical ? Orientation.Vertical : Orientation.Horizontal,
     proportionalLayout: props.proportionalLayout,
@@ -303,6 +323,16 @@ const initializeSplitView = () => {
     // Otherwise distribute view sizes
     splitViewRef.value?.distributeViewSizes();
   });
+  
+  // 如果容器已有大小，立即进行布局
+  if (containerSize > 0) {
+    splitViewRef.value.layout(containerSize);
+    
+    // 处理 preferredSize
+    for (let index = 0; index < views.value.length; index++) {
+      resizeToPreferredSize(index);
+    }
+  }
 };
 
 // Update views when children change

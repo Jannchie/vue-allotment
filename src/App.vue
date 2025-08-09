@@ -139,8 +139,8 @@ const removePane = (id: number) => {
 
       <h2>Snap to Zero</h2>
       <div class="demo-box">
-        <Allotment :default-sizes="[200, 300]" :snap="true">
-          <Pane key="snap1">
+        <Allotment :default-sizes="[200, 300]">
+          <Pane key="snap1" :min-size="0" :snap="true">
             <div class="pane-content pane-5">
               <h3>Snap Pane</h3>
               <p>This pane can snap to 0</p>
@@ -251,7 +251,6 @@ const removePane = (id: number) => {
       </div>
       <div class="demo-box">
         <Allotment
-          :snap="true"
           @visible-change="onVisibleChange"
         >
           <Pane key="vis1">
@@ -260,7 +259,7 @@ const removePane = (id: number) => {
               <p>This pane is always shown</p>
             </div>
           </Pane>
-          <Pane key="vis2" :visible="visible1">
+          <Pane key="vis2" :visible="visible1" :min-size="0" :snap="true">
             <div class="pane-content pane-2">
               <h3>Toggleable</h3>
               <p>Click button to hide/show</p>
