@@ -3,7 +3,7 @@
     ref="paneRef"
     :class="[
       'split-view-view',
-      'split-view-view-visible',
+      visible && 'split-view-view-visible',
       styles.splitViewView,
       className
     ]"

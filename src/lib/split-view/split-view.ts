@@ -822,41 +822,47 @@ export class SplitView extends EventEmitter implements Disposable {
 
     const currentSizes = sizes ?? this.viewItems.map((i) => i?.size || 0);
 
-    delta = this.doResize(upIndexes, downIndexes, delta, currentSizes);
-    delta = this.doResize(downIndexes, upIndexes, -delta, currentSizes);
+    // Get the items and their current sizes
+    const upItems = upIndexes.map(i => this.viewItems[i]);
+    const upSizes = upIndexes.map(i => currentSizes[i]);
+    
+    const downItems = downIndexes.map(i => this.viewItems[i]);
+    const downSizes = downIndexes.map(i => currentSizes[i]);
 
-    this.distributeEmptySpace();
-    this.layoutViews();
-  }
-
-  private doResize(
-    indexes: number[],
-    _reverseIndexes: number[],
-    delta: number,
-    currentSizes: number[],
-  ): number {
-    for (const index of indexes) {
-      const item = this.viewItems[index];
-      
+    // Resize up items (they should increase when delta is positive)
+    for (let i = 0, deltaUp = delta; i < upItems.length; i++) {
+      const item = upItems[i];
       if (!item) continue;
 
       const size = clamp(
-        currentSizes[index] + delta,
+        upSizes[i] + deltaUp,
         item.minimumSize,
         item.maximumSize,
       );
 
-      const sizeDelta = size - currentSizes[index];
-
-      delta -= sizeDelta;
+      const viewDelta = size - upSizes[i];
+      deltaUp -= viewDelta;
       item.size = size;
-
-      if (delta === 0) {
-        break;
-      }
     }
 
-    return delta;
+    // Resize down items (they should decrease when delta is positive)
+    for (let i = 0, deltaDown = delta; i < downItems.length; i++) {
+      const item = downItems[i];
+      if (!item) continue;
+
+      const size = clamp(
+        downSizes[i] - deltaDown,
+        item.minimumSize,
+        item.maximumSize,
+      );
+
+      const viewDelta = size - downSizes[i];
+      deltaDown += viewDelta;
+      item.size = size;
+    }
+
+    this.distributeEmptySpace();
+    this.layoutViews();
   }
 
   private distributeEmptySpace(lowPriorityIndexes?: number[]): void {

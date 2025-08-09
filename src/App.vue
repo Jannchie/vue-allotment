@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { Allotment, Pane } from './lib';
+import { Allotment, Pane, type AllotmentHandle } from './lib';
 import { ref } from 'vue';
 
 const sizes = ref<number[]>([]);
+const allotmentRef = ref<AllotmentHandle>();
+const visible1 = ref(true);
+const visible2 = ref(true);
+const preferredSize = ref(200);
+const panes = ref([0, 1, 2]);
 
 const onSizeChange = (newSizes: number[]) => {
   sizes.value = newSizes;
@@ -19,6 +24,37 @@ const onDragStart = (startSizes: number[]) => {
 
 const onDragEnd = (endSizes: number[]) => {
   console.log('Drag ended with sizes:', endSizes);
+};
+
+const onVisibleChange = (index: number, visible: boolean) => {
+  console.log(`Pane ${index} visibility changed to:`, visible);
+  if (index === 1) {
+    visible1.value = visible;
+  }
+};
+
+const resetAllotment = () => {
+  allotmentRef.value?.reset();
+};
+
+const resizeAllotment = () => {
+  allotmentRef.value?.resize([200, 300, 200]);
+};
+
+const randomPreferredSize = () => {
+  preferredSize.value = Math.round(100 + Math.random() * 200);
+};
+
+const addPane = () => {
+  const newId = Math.max(...panes.value, -1) + 1;
+  panes.value.push(newId);
+};
+
+const removePane = (id: number) => {
+  const index = panes.value.indexOf(id);
+  if (index > -1) {
+    panes.value.splice(index, 1);
+  }
 };
 </script>
 
@@ -101,6 +137,25 @@ const onDragEnd = (endSizes: number[]) => {
         </Allotment>
       </div>
 
+      <h2>Snap to Zero</h2>
+      <div class="demo-box">
+        <Allotment :default-sizes="[200, 300]" :snap="true">
+          <Pane key="snap1">
+            <div class="pane-content pane-5">
+              <h3>Snap Pane</h3>
+              <p>This pane can snap to 0</p>
+              <p>Min size: 0px (with snap)</p>
+            </div>
+          </Pane>
+          <Pane key="normal1">
+            <div class="pane-content pane-6">
+              <h3>Normal Pane</h3>
+              <p>Regular pane</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
       <h2>Nested Splits</h2>
       <div class="demo-box">
         <Allotment>
@@ -125,6 +180,113 @@ const onDragEnd = (endSizes: number[]) => {
                 </div>
               </Pane>
             </Allotment>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h2>Advanced Features</h2>
+      
+      <h3>Reset and Resize Controls</h3>
+      <div class="controls">
+        <button @click="resetAllotment" class="control-btn">Reset Layout</button>
+        <button @click="resizeAllotment" class="control-btn">Resize to [200, 300, 200]</button>
+      </div>
+      <div class="demo-box">
+        <Allotment ref="allotmentRef" :default-sizes="[250, 250, 200]">
+          <Pane key="control1">
+            <div class="pane-content pane-1">
+              <h3>Pane 1</h3>
+              <p>Use controls above</p>
+            </div>
+          </Pane>
+          <Pane key="control2">
+            <div class="pane-content pane-2">
+              <h3>Pane 2</h3>
+              <p>To reset or resize</p>
+            </div>
+          </Pane>
+          <Pane key="control3">
+            <div class="pane-content pane-3">
+              <h3>Pane 3</h3>
+              <p>The layout</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h3>Preferred Size with Percentage</h3>
+      <div class="controls">
+        <button @click="randomPreferredSize" class="control-btn">
+          Random preferredSize: {{ preferredSize }}px
+        </button>
+      </div>
+      <div class="demo-box">
+        <Allotment>
+          <Pane key="pref1" preferred-size="20%">
+            <div class="pane-content pane-4">
+              <h3>20% Width</h3>
+              <p>Preferred size: 20%</p>
+            </div>
+          </Pane>
+          <Pane key="pref2">
+            <div class="pane-content pane-5">
+              <h3>Flexible</h3>
+              <p>Takes remaining space</p>
+            </div>
+          </Pane>
+          <Pane key="pref3" :preferred-size="preferredSize">
+            <div class="pane-content pane-6">
+              <h3>Dynamic</h3>
+              <p>Preferred: {{ preferredSize }}px</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h3>Visible/Hidden Panes</h3>
+      <div class="controls">
+        <button @click="visible1 = !visible1" class="control-btn">
+          {{ visible1 ? 'Hide' : 'Show' }} Middle Pane
+        </button>
+      </div>
+      <div class="demo-box">
+        <Allotment
+          :snap="true"
+          @visible-change="onVisibleChange"
+        >
+          <Pane key="vis1">
+            <div class="pane-content pane-1">
+              <h3>Always Visible</h3>
+              <p>This pane is always shown</p>
+            </div>
+          </Pane>
+          <Pane key="vis2" :visible="visible1">
+            <div class="pane-content pane-2">
+              <h3>Toggleable</h3>
+              <p>Click button to hide/show</p>
+            </div>
+          </Pane>
+          <Pane key="vis3">
+            <div class="pane-content pane-3">
+              <h3>Always Visible</h3>
+              <p>This pane is always shown</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h3>Dynamic Add/Remove Panes</h3>
+      <div class="controls">
+        <button @click="addPane" class="control-btn">Add Pane</button>
+      </div>
+      <div class="demo-box">
+        <Allotment>
+          <Pane v-for="paneId in panes" :key="`pane-${paneId}`">
+            <div class="pane-content" :class="`pane-${(paneId % 6) + 1}`">
+              <h3>Pane {{ paneId + 1 }}</h3>
+              <button @click="removePane(paneId)" class="close-btn">×</button>
+              <p>Dynamic pane</p>
+            </div>
           </Pane>
         </Allotment>
       </div>
@@ -212,6 +374,16 @@ h2 {
   color: #2e7d32;
 }
 
+.pane-5 {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.pane-6 {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
 .pane-content h3 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
@@ -225,5 +397,57 @@ h2 {
 
 .pane-content p:last-child {
   margin-bottom: 0;
+}
+
+.controls {
+  margin: 10px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.control-btn:hover {
+  background-color: #2980b9;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background-color: #ff4444;
+  color: white;
+  border-color: #ff4444;
+}
+
+h3 {
+  color: #34495e;
+  margin-bottom: 10px;
 }
 </style>

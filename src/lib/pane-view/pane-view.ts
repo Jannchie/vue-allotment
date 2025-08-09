@@ -95,8 +95,11 @@ export class PaneView implements View {
     this.layoutService = layoutService;
     this.element = options.element;
 
-    this.minimumSize =
-      typeof options.minimumSize === "number" ? options.minimumSize : 30;
+    // 如果启用了 snap，最小尺寸应该是 0
+    this.snap = typeof options.snap === "boolean" ? options.snap : false;
+    
+    this.minimumSize = this.snap ? 0 : 
+      (typeof options.minimumSize === "number" ? options.minimumSize : 30);
 
     this.maximumSize =
       typeof options.maximumSize === "number"
@@ -131,8 +134,6 @@ export class PaneView implements View {
     }
 
     this.priority = options.priority ?? LayoutPriority.Normal;
-
-    this.snap = typeof options.snap === "boolean" ? options.snap : false;
   }
 
   layout(_size: number): void {}

@@ -120,7 +120,18 @@ provide('allotment', {
     splitViewViewRef.delete(key);
     splitViewPropsRef.delete(key);
   },
+  registerNonPane: (key: string, element: HTMLElement) => {
+    // Handle non-Pane elements that need to be wrapped
+    splitViewViewRef.set(key, element);
+    splitViewPropsRef.set(key, {});
+  },
 });
+
+// Helper to check if a VNode is a Pane component
+const isPane = (vnode: VNode): boolean => {
+  return vnode.type && typeof vnode.type === 'object' && 
+         'name' in vnode.type && vnode.type.name === 'Pane';
+};
 
 // Computed properties
 const childrenArray = computed(() => {
@@ -130,7 +141,8 @@ const childrenArray = computed(() => {
       if (Array.isArray(vnode.children)) {
         return acc.concat(flattenVNodes(vnode.children as VNode[]));
       }
-      if (vnode.type && typeof vnode.type === 'object' && 'name' in vnode.type) {
+      // Include both Pane components and other valid elements
+      if (vnode.type) {
         acc.push(vnode);
       }
       return acc;
@@ -154,15 +166,15 @@ const resizeToPreferredSize = (index: number): boolean => {
 
 // Expose methods for template ref
 const reset = () => {
-  if (props.defaultSizes) {
-    splitViewRef.value?.resizeViews(props.defaultSizes);
-  } else {
-    splitViewRef.value?.distributeViewSizes();
-    for (let index = 0; index < views.value.length; index++) {
-      resizeToPreferredSize(index);
-    }
-  }
   emit('reset');
+  
+  // Perform default reset behavior
+  if (!splitViewRef.value) return;
+  
+  splitViewRef.value.distributeViewSizes();
+  for (let index = 0; index < views.value.length; index++) {
+    resizeToPreferredSize(index);
+  }
 };
 
 const resize = (sizes: number[]) => {
@@ -196,14 +208,26 @@ const initializeSplitView = () => {
     );
   }
 
+  // 获取容器实际大小
+  const containerRect = containerRef.value.getBoundingClientRect();
+  const containerSize = props.vertical ? containerRect.height : containerRect.width;
+  const defaultTotalSize = props.defaultSizes?.reduce((a, b) => a + b, 0) || 0;
+  
+  // 如果 defaultSizes 总和与容器大小不同，按比例调整
+  let adjustedSizes = props.defaultSizes;
+  if (containerSize > 0 && defaultTotalSize > 0 && Math.abs(containerSize - defaultTotalSize) > 1) {
+    const ratio = containerSize / defaultTotalSize;
+    adjustedSizes = props.defaultSizes?.map(size => Math.round(size * ratio));
+  }
+
   const options: SplitViewOptions = {
     orientation: props.vertical ? Orientation.Vertical : Orientation.Horizontal,
     proportionalLayout: props.proportionalLayout,
     ...(initializeSizes &&
-      props.defaultSizes && {
+      adjustedSizes && {
         descriptor: {
-          size: props.defaultSizes.reduce((a, b) => a + b, 0),
-          views: props.defaultSizes.map((size, index) => {
+          size: adjustedSizes.reduce((a, b) => a + b, 0),
+          views: adjustedSizes.map((size, index) => {
             const paneProps = splitViewPropsRef.get(
               previousKeys.value[index],
             );
@@ -266,6 +290,8 @@ const initializeSplitView = () => {
 
   splitViewRef.value?.on("sashreset", (index: number) => {
     emit('reset');
+    
+    // Try to resize to preferred size first
     if (resizeToPreferredSize(index)) {
       return;
     }
@@ -274,6 +300,7 @@ const initializeSplitView = () => {
       return;
     }
 
+    // Otherwise distribute view sizes
     splitViewRef.value?.distributeViewSizes();
   });
 };
