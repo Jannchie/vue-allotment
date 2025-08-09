@@ -247,6 +247,11 @@ abstract class ViewItem {
 class VerticalViewItem extends ViewItem {
   layout(offset: number): void {
     if (!this.visible) {
+      // Set height to 0 for invisible items
+      this.container.style.height = "0px";
+      this.container.style.top = offset + "px";
+      this.container.style.left = "0px";
+      this.container.style.width = "100%";
       return;
     }
 
@@ -262,6 +267,11 @@ class VerticalViewItem extends ViewItem {
 class HorizontalViewItem extends ViewItem {
   layout(offset: number): void {
     if (!this.visible) {
+      // Set width to 0 for invisible items
+      this.container.style.width = "0px";
+      this.container.style.left = offset + "px";
+      this.container.style.top = "0px";
+      this.container.style.height = "100%";
       return;
     }
 
@@ -478,13 +488,34 @@ export class SplitView extends EventEmitter implements Disposable {
 
       sash.on("end", () => {
         this.emit("sashDragEnd");
-        this.onSashEnd(this.sashItems.findIndex((item) => item.sash === sash));
+        // Find index handling potential Proxy wrapping
+        let index = this.sashItems.findIndex((item) => item.sash === sash);
+        if (index === -1) {
+          const sashEl = (sash as any).el;
+          if (sashEl) {
+            index = this.sashItems.findIndex((item) => {
+              const itemSashEl = (item.sash as any).el;
+              return itemSashEl === sashEl;
+            });
+          }
+        }
+        this.onSashEnd(index);
         const sizes = this.viewItems.map((i) => i.size);
         this.onDidDragEnd?.(sizes);
       });
 
       sash.on("reset", () => {
-        const index = this.sashItems.findIndex((item) => item.sash === sash);
+        // Find index handling potential Proxy wrapping
+        let index = this.sashItems.findIndex((item) => item.sash === sash);
+        if (index === -1) {
+          const sashEl = (sash as any).el;
+          if (sashEl) {
+            index = this.sashItems.findIndex((item) => {
+              const itemSashEl = (item.sash as any).el;
+              return itemSashEl === sashEl;
+            });
+          }
+        }
         const upIndexes = range(index, -1, -1);
         const downIndexes = range(index + 1, this.viewItems.length);
         const snapBeforeIndex = this.findFirstSnapIndex(upIndexes);
@@ -510,9 +541,6 @@ export class SplitView extends EventEmitter implements Disposable {
       const sashItem: SashItem = { sash };
 
       this.sashItems.splice(index - 1, 0, sashItem);
-      
-      // 在添加到数组后再进行布局
-      sash.layout();
     }
 
     if (!skipLayout) {
@@ -687,7 +715,9 @@ export class SplitView extends EventEmitter implements Disposable {
     viewItem.setVisible(visible);
 
     this.emit("sashchange", index);
-    this.relayout();
+    this.distributeEmptySpace();
+    this.layoutViews();
+    this.saveProportions();
   }
 
   public distributeViewSizes(): void {
@@ -731,7 +761,19 @@ export class SplitView extends EventEmitter implements Disposable {
   }
 
   private onSashStart({ sash, start, current }: SashEvent): void {
-    const index = this.sashItems.findIndex((item) => item.sash === sash);
+    // Find sash index, handling potential Proxy wrapping
+    let index = this.sashItems.findIndex((item) => item.sash === sash);
+    
+    // If direct comparison fails (due to Proxy wrapping), try comparing DOM elements
+    if (index === -1) {
+      const sashEl = (sash as any).el;
+      if (sashEl) {
+        index = this.sashItems.findIndex((item) => {
+          const itemSashEl = (item.sash as any).el;
+          return itemSashEl === sashEl;
+        });
+      }
+    }
 
     const sizes = this.viewItems.map((i) => i.size);
 
@@ -958,7 +1000,7 @@ export class SplitView extends EventEmitter implements Disposable {
     return delta;
   }
 
-  private distributeEmptySpace(lowPriorityIndexes?: number[]): void {
+  private distributeEmptySpace(lowPriorityIndex?: number): void {
     if (this.viewItems.length === 0) {
       return;
     }
@@ -966,16 +1008,33 @@ export class SplitView extends EventEmitter implements Disposable {
     const contentSize = this.viewItems.reduce((r, i) => r + i.size, 0);
     let emptyDelta = this.size - contentSize;
 
-    const indexes = range(0, this.viewItems.length - 1, -1);
+    const indexes = range(0, this.viewItems.length);
+    const sortedIndexes: number[] = [];
 
-    if (lowPriorityIndexes) {
-      for (const priorityIndex of lowPriorityIndexes) {
-        pushToStart(indexes, priorityIndex);
-      }
+    const lowPriorityIndexes = indexes.filter(
+      (i) => this.viewItems[i].priority === LayoutPriority.Low,
+    );
+
+    const normalPriorityIndexes = indexes.filter(
+      (i) => this.viewItems[i].priority === LayoutPriority.Normal,
+    );
+
+    const highPriorityIndexes = indexes.filter(
+      (i) => this.viewItems[i].priority === LayoutPriority.High,
+    );
+
+    sortedIndexes.push(
+      ...highPriorityIndexes,
+      ...normalPriorityIndexes,
+      ...lowPriorityIndexes,
+    );
+
+    if (typeof lowPriorityIndex === "number") {
+      pushToEnd(sortedIndexes, lowPriorityIndex);
     }
 
-    for (const index of indexes) {
-      const item = this.viewItems[index];
+    for (let i = 0; emptyDelta !== 0 && i < sortedIndexes.length; i++) {
+      const item = this.viewItems[sortedIndexes[i]];
       
       if (!item) continue;
 
@@ -985,9 +1044,9 @@ export class SplitView extends EventEmitter implements Disposable {
         item.maximumSize,
       );
 
-      const sizeDelta = size - item.size;
+      const viewDelta = size - item.size;
 
-      emptyDelta -= sizeDelta;
+      emptyDelta -= viewDelta;
       item.size = size;
     }
 
@@ -1020,17 +1079,21 @@ export class SplitView extends EventEmitter implements Disposable {
   }
 
   private relayout(lowPriorityIndexes?: number[], highPriorityIndexes?: number[]): void {
-    const previousSize = Math.max(this.size, this.contentSize);
+    const contentSize = this.viewItems.reduce((r, i) => r + i.size, 0);
 
     this.resize(
       this.viewItems.length - 1,
-      this.size - previousSize,
+      this.size - contentSize,
       undefined,
       lowPriorityIndexes,
       highPriorityIndexes,
       Number.NEGATIVE_INFINITY,
       Number.POSITIVE_INFINITY,
     );
+    
+    this.distributeEmptySpace();
+    this.layoutViews();
+    this.saveProportions();
   }
 
   private getSashPosition(sash: Sash): number {

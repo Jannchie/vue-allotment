@@ -115,6 +115,12 @@ provide('allotment', {
   registerPane: (key: string, element: HTMLElement, props: any) => {
     splitViewViewRef.set(key, element);
     splitViewPropsRef.set(key, props);
+    // Trigger updateViews when pane props change
+    if (dimensionsInitialized.value) {
+      nextTick(() => {
+        updateViews();
+      });
+    }
   },
   unregisterPane: (key: string) => {
     splitViewViewRef.delete(key);
