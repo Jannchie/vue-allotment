@@ -352,6 +352,7 @@ h2 {
   justify-content: center;
   align-items: center;
   text-align: center;
+  position: relative;
 }
 
 .pane-1 {

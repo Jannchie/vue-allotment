@@ -771,7 +771,7 @@ export class SplitView extends EventEmitter implements Disposable {
       0,
     );
 
-    return Math.min(upMinDelta, downMaxDelta);
+    return Math.max(upMinDelta, downMaxDelta);
   }
 
   private getMaxDelta(upIndexes: number[], downIndexes: number[], sizes: number[]): number {
@@ -785,7 +785,7 @@ export class SplitView extends EventEmitter implements Disposable {
       0,
     );
 
-    return Math.min(upMaxDelta, downMinDelta);
+    return Math.min(downMinDelta, upMaxDelta);
   }
 
   private resize(

@@ -100,10 +100,3 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-.split-view-view {
-  overflow: hidden;
-  position: absolute;
-  white-space: initial;
-}
-</style>
