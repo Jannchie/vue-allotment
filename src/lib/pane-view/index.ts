@@ -1,1 +1,1 @@
-export * from './pane-view';
+export * from './pane-view'

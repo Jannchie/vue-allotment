@@ -1,1 +1,1 @@
-export * from './sash';
+export * from './sash'

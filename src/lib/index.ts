@@ -1,19 +1,19 @@
 // Components
-export { default as Allotment } from './Allotment.vue';
-export { default as Pane } from './Pane.vue';
-
+export { default as Allotment } from './Allotment.vue'
 // Types
-export type { AllotmentProps, AllotmentHandle } from './Allotment.vue';
-export type { PaneProps } from './Pane.vue';
-
-// Enums and Constants
-export { LayoutPriority } from './split-view';
-export { Orientation } from './sash';
-
-// Utilities
-export { setSashSize } from './utils';
+export type { AllotmentHandle, AllotmentProps } from './Allotment.vue'
 
 // Re-export core functionality for advanced use cases
-export { LayoutService } from './layout-service';
-export { PaneView } from './pane-view';
-export { SplitView, Sizing } from './split-view';
+export { LayoutService } from './layout-service'
+export { PaneView } from './pane-view'
+
+export { default as Pane } from './Pane.vue'
+export type { PaneProps } from './Pane.vue'
+
+export { Orientation } from './sash'
+
+// Enums and Constants
+export { LayoutPriority } from './split-view'
+export { Sizing, SplitView } from './split-view'
+// Utilities
+export { setSashSize } from './utils'

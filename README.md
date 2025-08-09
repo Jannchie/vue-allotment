@@ -5,7 +5,7 @@ A Vue 3 port of the popular React [Allotment](https://github.com/johnwalley/allo
 ## Features
 
 - 🎯 **Vue 3 Composition API** - Built with modern Vue 3 and TypeScript
-- 📱 **Responsive** - Works on desktop and mobile devices  
+- 📱 **Responsive** - Works on desktop and mobile devices
 - 🎨 **Customizable** - Full CSS customization support
 - 🔧 **TypeScript** - Complete type safety and IntelliSense
 - ⚡ **Performant** - Optimized for smooth interactions
@@ -24,6 +24,10 @@ yarn add allotment-vue
 ## Quick Start
 
 ```vue
+<script setup>
+import { Allotment, Pane } from 'allotment-vue'
+</script>
+
 <template>
   <Allotment>
     <Pane>
@@ -34,10 +38,6 @@ yarn add allotment-vue
     </Pane>
   </Allotment>
 </template>
-
-<script setup>
-import { Allotment, Pane } from 'allotment-vue'
-</script>
 ```
 
 ## Basic Usage
@@ -47,7 +47,7 @@ import { Allotment, Pane } from 'allotment-vue'
 ```vue
 <template>
   <Allotment>
-    <Pane minSize={200}>
+    <Pane min-size="{200}">
       <div>Left side</div>
     </Pane>
     <Pane>
@@ -76,12 +76,12 @@ import { Allotment, Pane } from 'allotment-vue'
 
 ```vue
 <template>
-  <Allotment :defaultSizes="[200, 300, 100]">
+  <Allotment :default-sizes="[200, 300, 100]">
     <Pane>
       <div>200px wide</div>
     </Pane>
     <Pane>
-      <div>300px wide</div>  
+      <div>300px wide</div>
     </Pane>
     <Pane>
       <div>100px wide</div>
@@ -97,7 +97,7 @@ import { Allotment, Pane } from 'allotment-vue'
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `defaultSizes` | `number[]` | - | Initial sizes for each pane |
-| `vertical` | `boolean` | `false` | Split direction |  
+| `vertical` | `boolean` | `false` | Split direction |
 | `separator` | `boolean` | `true` | Show separator between panes |
 | `proportionalLayout` | `boolean` | `true` | Resize proportionally |
 | `minSize` | `number` | `30` | Global minimum pane size |
@@ -120,65 +120,69 @@ import { Allotment, Pane } from 'allotment-vue'
 ## Events
 
 ```vue
+<script setup>
+function onSizeChange(sizes) {
+  console.log('New sizes:', sizes)
+}
+
+function onDragStart(sizes) {
+  console.log('Drag started with sizes:', sizes)
+}
+
+function onDragEnd(sizes) {
+  console.log('Drag ended with sizes:', sizes)
+}
+
+function onReset() {
+  console.log('Panes were reset')
+}
+</script>
+
 <template>
-  <Allotment 
+  <Allotment
     @change="onSizeChange"
-    @dragStart="onDragStart"
-    @dragEnd="onDragEnd"
+    @drag-start="onDragStart"
+    @drag-end="onDragEnd"
     @reset="onReset"
   >
     <!-- panes -->
   </Allotment>
 </template>
-
-<script setup>
-const onSizeChange = (sizes) => {
-  console.log('New sizes:', sizes)
-}
-
-const onDragStart = (sizes) => {
-  console.log('Drag started with sizes:', sizes)
-}
-
-const onDragEnd = (sizes) => {
-  console.log('Drag ended with sizes:', sizes)
-}
-
-const onReset = () => {
-  console.log('Panes were reset')
-}
-</script>
 ```
 
 ## Programmatic Control
 
 ```vue
+<script setup>
+import { Allotment, Pane } from 'allotment-vue'
+import { ref } from 'vue'
+
+const allotmentRef = ref()
+
+function reset() {
+  allotmentRef.value?.reset()
+}
+
+function resize() {
+  allotmentRef.value?.resize([300, 400])
+}
+</script>
+
 <template>
   <div>
-    <button @click="reset">Reset</button>
-    <button @click="resize">Custom Resize</button>
-    
+    <button @click="reset">
+      Reset
+    </button>
+    <button @click="resize">
+      Custom Resize
+    </button>
+
     <Allotment ref="allotmentRef">
       <Pane>Panel 1</Pane>
       <Pane>Panel 2</Pane>
     </Allotment>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { Allotment, Pane } from 'allotment-vue'
-
-const allotmentRef = ref()
-
-const reset = () => {
-  allotmentRef.value?.reset()
-}
-
-const resize = () => {
-  allotmentRef.value?.resize([300, 400])
-}
-</script>
 ```
 
 ## Styling

@@ -1,4 +1,4 @@
-import { onMounted, onUpdated } from 'vue';
+import { onMounted, onUpdated } from 'vue'
 
 /**
  * Vue equivalent of React's useIsomorphicLayoutEffect
@@ -6,36 +6,36 @@ import { onMounted, onUpdated } from 'vue';
  */
 export function useIsomorphicLayoutEffect(
   callback: () => void | (() => void),
-  deps?: any[]
+  deps?: any[],
 ): void {
-  let cleanup: (() => void) | void;
+  let cleanup: (() => void) | void
 
   const runCallback = () => {
     if (cleanup) {
-      cleanup();
+      cleanup()
     }
-    cleanup = callback();
-  };
+    cleanup = callback()
+  }
 
   onMounted(() => {
-    runCallback();
-  });
+    runCallback()
+  })
 
   // If deps are provided, we need to watch them
   if (deps && deps.length > 0) {
     onUpdated(() => {
-      runCallback();
-    });
+      runCallback()
+    })
   }
 
   // Cleanup on unmount
   onMounted(() => {
     return () => {
       if (cleanup) {
-        cleanup();
+        cleanup()
       }
-    };
-  });
+    }
+  })
 }
 
-export default useIsomorphicLayoutEffect;
+export default useIsomorphicLayoutEffect

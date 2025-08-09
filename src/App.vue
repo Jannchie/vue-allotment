@@ -1,77 +1,81 @@
 <script setup lang="ts">
-import { Allotment, Pane, type AllotmentHandle } from './lib';
-import { ref } from 'vue';
+import type { AllotmentHandle } from './lib'
+import { ref } from 'vue'
+import { Allotment, Pane } from './lib'
 
-const sizes = ref<number[]>([]);
-const allotmentRef = ref<AllotmentHandle>();
-const visible1 = ref(true);
-const visible2 = ref(true);
-const preferredSize = ref(200);
-const panes = ref([0, 1, 2]);
+const sizes = ref<number[]>([])
+const allotmentRef = ref<AllotmentHandle>()
+const visible1 = ref(true)
+const preferredSize = ref(200)
+const panes = ref([0, 1, 2])
 
-const onSizeChange = (newSizes: number[]) => {
-  sizes.value = newSizes;
-  console.log('Sizes changed:', newSizes);
-};
+function onSizeChange(newSizes: number[]) {
+  sizes.value = newSizes
+  // console.log('Sizes changed:', newSizes)
+}
 
-const onReset = () => {
-  console.log('Reset triggered');
-};
+function onReset() {
+  // console.log('Reset triggered')
+}
 
-const onDragStart = (startSizes: number[]) => {
-  console.log('Drag started with sizes:', startSizes);
-};
+function onDragStart(_startSizes: number[]) {
+  // console.log('Drag started with sizes:', startSizes)
+}
 
-const onDragEnd = (endSizes: number[]) => {
-  console.log('Drag ended with sizes:', endSizes);
-};
+function onDragEnd(_endSizes: number[]) {
+  // console.log('Drag ended with sizes:', endSizes)
+}
 
-const onVisibleChange = (index: number, visible: boolean) => {
-  console.log(`Pane ${index} visibility changed to:`, visible);
+function onVisibleChange(index: number, visible: boolean) {
+  // console.log(`Pane ${index} visibility changed to:`, visible)
   if (index === 1) {
-    visible1.value = visible;
+    visible1.value = visible
   }
-};
+}
 
-const resetAllotment = () => {
-  allotmentRef.value?.reset();
-};
+function resetAllotment() {
+  allotmentRef.value?.reset()
+}
 
-const resizeAllotment = () => {
-  allotmentRef.value?.resize([200, 300, 200]);
-};
+function resizeAllotment() {
+  allotmentRef.value?.resize([200, 300, 200])
+}
 
-const randomPreferredSize = () => {
-  preferredSize.value = Math.round(100 + Math.random() * 200);
-};
+function randomPreferredSize() {
+  preferredSize.value = Math.round(100 + Math.random() * 200)
+}
 
-const addPane = () => {
-  const newId = Math.max(...panes.value, -1) + 1;
-  panes.value.push(newId);
-};
+function addPane() {
+  const newId = Math.max(...panes.value, -1) + 1
+  panes.value.push(newId)
+}
 
-const removePane = (id: number) => {
-  const index = panes.value.indexOf(id);
-  if (index > -1) {
-    panes.value.splice(index, 1);
+function removePane(id: number) {
+  const index = panes.value.indexOf(id)
+  if (index !== -1) {
+    panes.value.splice(index, 1)
   }
-};
+}
 </script>
 
 <template>
   <div id="app">
     <h1>Vue Allotment Demo</h1>
-    
+
     <div class="demo-container">
       <div class="info-panel">
         <h3>Current Sizes</h3>
-        <p v-if="sizes.length">{{ sizes.map(s => Math.round(s)).join('px, ') }}px</p>
-        <p v-else>No sizes available yet</p>
+        <p v-if="sizes.length > 0">
+          {{ sizes.map(s => Math.round(s)).join('px, ') }}px
+        </p>
+        <p v-else>
+          No sizes available yet
+        </p>
       </div>
 
       <h2>Basic Horizontal Split</h2>
       <div class="demo-box">
-        <Allotment 
+        <Allotment
           :default-sizes="[300, 400]"
           @change="onSizeChange"
           @reset="onReset"
@@ -185,11 +189,15 @@ const removePane = (id: number) => {
       </div>
 
       <h2>Advanced Features</h2>
-      
+
       <h3>Reset and Resize Controls</h3>
       <div class="controls">
-        <button @click="resetAllotment" class="control-btn">Reset Layout</button>
-        <button @click="resizeAllotment" class="control-btn">Resize to [200, 300, 200]</button>
+        <button class="control-btn" @click="resetAllotment">
+          Reset Layout
+        </button>
+        <button class="control-btn" @click="resizeAllotment">
+          Resize to [200, 300, 200]
+        </button>
       </div>
       <div class="demo-box">
         <Allotment ref="allotmentRef" :default-sizes="[250, 250, 200]">
@@ -216,7 +224,7 @@ const removePane = (id: number) => {
 
       <h3>Preferred Size with Percentage</h3>
       <div class="controls">
-        <button @click="randomPreferredSize" class="control-btn">
+        <button class="control-btn" @click="randomPreferredSize">
           Random preferredSize: {{ preferredSize }}px
         </button>
       </div>
@@ -245,7 +253,7 @@ const removePane = (id: number) => {
 
       <h3>Visible/Hidden Panes</h3>
       <div class="controls">
-        <button @click="visible1 = !visible1" class="control-btn">
+        <button class="control-btn" @click="visible1 = !visible1">
           {{ visible1 ? 'Hide' : 'Show' }} Middle Pane
         </button>
       </div>
@@ -276,14 +284,18 @@ const removePane = (id: number) => {
 
       <h3>Dynamic Add/Remove Panes</h3>
       <div class="controls">
-        <button @click="addPane" class="control-btn">Add Pane</button>
+        <button class="control-btn" @click="addPane">
+          Add Pane
+        </button>
       </div>
       <div class="demo-box">
         <Allotment>
           <Pane v-for="paneId in panes" :key="`pane-${paneId}`">
             <div class="pane-content" :class="`pane-${(paneId % 6) + 1}`">
               <h3>Pane {{ paneId + 1 }}</h3>
-              <button @click="removePane(paneId)" class="close-btn">×</button>
+              <button class="close-btn" @click="removePane(paneId)">
+                ×
+              </button>
               <p>Dynamic pane</p>
             </div>
           </Pane>

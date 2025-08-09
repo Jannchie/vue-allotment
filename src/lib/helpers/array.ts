@@ -2,11 +2,11 @@
  * Pushes an element to the start of the array, if found.
  */
 export function pushToStart<T>(arr: T[], value: T): void {
-  const index = arr.indexOf(value);
+  const index = arr.indexOf(value)
 
-  if (index > -1) {
-    arr.splice(index, 1);
-    arr.unshift(value);
+  if (index !== -1) {
+    arr.splice(index, 1)
+    arr.unshift(value)
   }
 }
 
@@ -14,11 +14,11 @@ export function pushToStart<T>(arr: T[], value: T): void {
  * Pushes an element to the end of the array, if found.
  */
 export function pushToEnd<T>(arr: T[], value: T): void {
-  const index = arr.indexOf(value);
+  const index = arr.indexOf(value)
 
-  if (index > -1) {
-    arr.splice(index, 1);
-    arr.push(value);
+  if (index !== -1) {
+    arr.splice(index, 1)
+    arr.push(value)
   }
 }
 
@@ -30,14 +30,14 @@ export function pushToEnd<T>(arr: T[], value: T): void {
  * @param step If step is positive, the last element is the largest start + i * step less than stop; if step is negative, the last element is the smallest start + i * step greater than stop
  */
 export function range(start: number, stop: number, step: number = 1): number[] {
-  const n = Math.max(0, Math.ceil((stop - start) / step));
-  const range = new Array(n);
+  const n = Math.max(0, Math.ceil((stop - start) / step))
+  const range = Array.from({ length: n })
 
-  let i = -1;
+  let i = -1
 
   while (++i < n) {
-    range[i] = start + i * step;
+    range[i] = start + i * step
   }
 
-  return range;
+  return range
 }
