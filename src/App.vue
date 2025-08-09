@@ -1,0 +1,229 @@
+<script setup lang="ts">
+import { Allotment, Pane } from './lib';
+import { ref } from 'vue';
+
+const sizes = ref<number[]>([]);
+
+const onSizeChange = (newSizes: number[]) => {
+  sizes.value = newSizes;
+  console.log('Sizes changed:', newSizes);
+};
+
+const onReset = () => {
+  console.log('Reset triggered');
+};
+
+const onDragStart = (startSizes: number[]) => {
+  console.log('Drag started with sizes:', startSizes);
+};
+
+const onDragEnd = (endSizes: number[]) => {
+  console.log('Drag ended with sizes:', endSizes);
+};
+</script>
+
+<template>
+  <div id="app">
+    <h1>Vue Allotment Demo</h1>
+    
+    <div class="demo-container">
+      <div class="info-panel">
+        <h3>Current Sizes</h3>
+        <p v-if="sizes.length">{{ sizes.map(s => Math.round(s)).join('px, ') }}px</p>
+        <p v-else>No sizes available yet</p>
+      </div>
+
+      <h2>Basic Horizontal Split</h2>
+      <div class="demo-box">
+        <Allotment 
+          :default-sizes="[300, 400]"
+          @change="onSizeChange"
+          @reset="onReset"
+          @drag-start="onDragStart"
+          @drag-end="onDragEnd"
+        >
+          <Pane key="pane1">
+            <div class="pane-content pane-1">
+              <h3>Left Pane</h3>
+              <p>This is the left pane. Try dragging the sash!</p>
+              <p>Min size: 30px</p>
+            </div>
+          </Pane>
+          <Pane key="pane2">
+            <div class="pane-content pane-2">
+              <h3>Right Pane</h3>
+              <p>This is the right pane.</p>
+              <p>You can resize by dragging the divider.</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h2>Vertical Split</h2>
+      <div class="demo-box">
+        <Allotment vertical :default-sizes="[150, 150]">
+          <Pane key="top">
+            <div class="pane-content pane-3">
+              <h3>Top Pane</h3>
+              <p>This is the top pane</p>
+            </div>
+          </Pane>
+          <Pane key="bottom">
+            <div class="pane-content pane-4">
+              <h3>Bottom Pane</h3>
+              <p>This is the bottom pane</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h2>Three Panes with Custom Properties</h2>
+      <div class="demo-box">
+        <Allotment :default-sizes="[200, 300, 100]">
+          <Pane key="left" :min-size="100" :max-size="400">
+            <div class="pane-content pane-1">
+              <h3>Left</h3>
+              <p>Min: 100px, Max: 400px</p>
+            </div>
+          </Pane>
+          <Pane key="center" :min-size="200">
+            <div class="pane-content pane-2">
+              <h3>Center</h3>
+              <p>Min: 200px</p>
+            </div>
+          </Pane>
+          <Pane key="right" :min-size="50" :max-size="200">
+            <div class="pane-content pane-3">
+              <h3>Right</h3>
+              <p>Min: 50px, Max: 200px</p>
+            </div>
+          </Pane>
+        </Allotment>
+      </div>
+
+      <h2>Nested Splits</h2>
+      <div class="demo-box">
+        <Allotment>
+          <Pane key="main-left">
+            <div class="pane-content pane-1">
+              <h3>Left Panel</h3>
+              <p>Static left panel</p>
+            </div>
+          </Pane>
+          <Pane key="main-right">
+            <Allotment vertical :default-sizes="[150, 150]">
+              <Pane key="nested-top">
+                <div class="pane-content pane-2">
+                  <h3>Top Right</h3>
+                  <p>Nested top panel</p>
+                </div>
+              </Pane>
+              <Pane key="nested-bottom">
+                <div class="pane-content pane-4">
+                  <h3>Bottom Right</h3>
+                  <p>Nested bottom panel</p>
+                </div>
+              </Pane>
+            </Allotment>
+          </Pane>
+        </Allotment>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+#app {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #34495e;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.demo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-panel {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.info-panel h3 {
+  margin-top: 0;
+  color: #495057;
+}
+
+.info-panel p {
+  margin-bottom: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+}
+
+.demo-box {
+  height: 300px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.pane-content {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.pane-1 {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.pane-2 {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.pane-3 {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.pane-4 {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.pane-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+}
+
+.pane-content p {
+  margin: 0 0 8px 0;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.pane-content p:last-child {
+  margin-bottom: 0;
+}
+</style>
