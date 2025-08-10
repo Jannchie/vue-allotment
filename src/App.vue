@@ -358,6 +358,7 @@ h2 {
 .pane-content {
   height: 100%;
   padding: 20px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;

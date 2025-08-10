@@ -194,9 +194,10 @@ function initializeSplitView() {
     )
   }
 
-  // 获取容器实际大小
-  const containerRect = containerRef.value.getBoundingClientRect()
-  const containerSize = props.vertical ? containerRect.height : containerRect.width
+  // 获取容器实际可用大小（不包括 padding 和 border）
+  const containerSize = props.vertical 
+    ? containerRef.value.clientHeight 
+    : containerRef.value.clientWidth
 
   // 设置 layoutService 的大小，以便百分比计算正确
   layoutService.value.setSize(containerSize)
@@ -444,12 +445,14 @@ function setupResizeObserver() {
     return
   }
 
-  resizeObserver.value = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      const { width, height } = entry.contentRect
-      if (width && height) {
-        splitViewRef.value?.layout(props.vertical ? height : width)
-        layoutService.value.setSize(props.vertical ? height : width)
+  resizeObserver.value = new ResizeObserver(() => {
+    if (containerRef.value) {
+      const size = props.vertical 
+        ? containerRef.value.clientHeight 
+        : containerRef.value.clientWidth
+      if (size > 0) {
+        splitViewRef.value?.layout(size)
+        layoutService.value.setSize(size)
         if (!dimensionsInitialized.value) {
           dimensionsInitialized.value = true
         }
@@ -473,8 +476,9 @@ onMounted(() => {
     // 强制重新布局以确保正确的初始位置
     setTimeout(() => {
       if (containerRef.value && splitViewRef.value) {
-        const rect = containerRef.value.getBoundingClientRect()
-        const size = props.vertical ? rect.height : rect.width
+        const size = props.vertical 
+          ? containerRef.value.clientHeight 
+          : containerRef.value.clientWidth
         if (size > 0) {
           splitViewRef.value.layout(size)
         }
