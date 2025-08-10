@@ -1,0 +1,101 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# Vue Allotment
+
+A Vue 3 port of the popular React [Allotment](https://github.com/johnwalley/allotment) component library.
+
+Vue Allotment provides resizable split views for Vue applications, perfect for creating complex layouts with draggable dividers.
+
+## Features
+
+- 🎯 **Vue 3 Composition API** - Built with modern Vue 3 and TypeScript
+- 📱 **Responsive** - Works on desktop and mobile devices  
+- 🎨 **Customizable** - Full CSS customization support
+- 🔧 **TypeScript** - Complete type safety and IntelliSense
+- ⚡ **Performant** - Optimized for smooth interactions
+- 🧩 **Flexible** - Supports horizontal, vertical, and nested layouts
+
+## Quick Start
+
+```vue
+<script setup>
+import { Allotment, Pane } from 'vue-allotment'
+</script>
+
+<template>
+  <Allotment>
+    <Pane>
+      <div>Left Panel</div>
+    </Pane>
+    <Pane>
+      <div>Right Panel</div>
+    </Pane>
+  </Allotment>
+</template>
+```
+
+## Examples
+
+### Basic Usage
+- **Simple** - Basic horizontal split
+- **Vertical** - Vertical split layout
+- **Multiple Panes** - More than two panes
+- **With Constraints** - Min/max size constraints
+- **No Separator** - Hidden dividers
+- **With Snap** - Snap to zero size
+
+### Pane Configuration
+- **Min Size** - Minimum pane size
+- **Max Size** - Maximum pane size  
+- **Preferred Size** - Initial size preference
+- **Snap** - Individual pane snap behavior
+- **Visibility** - Show/hide panes
+
+### Advanced Layouts
+- **Nested Layout** - Multiple levels of splitting
+- **Code Editor Layout** - VS Code-like interface
+- **Dashboard Layout** - Complex dashboard with multiple panels
+- **Responsive Layout** - Collapsible panels
+
+## API Reference
+
+### Allotment Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `defaultSizes` | `number[]` | - | Initial sizes for each pane |
+| `vertical` | `boolean` | `false` | Split direction |
+| `separator` | `boolean` | `true` | Show separator between panes |
+| `proportionalLayout` | `boolean` | `true` | Resize proportionally |
+| `minSize` | `number` | `30` | Global minimum pane size |
+| `maxSize` | `number` | `Infinity` | Global maximum pane size |
+| `snap` | `boolean` | `false` | Enable snapping to zero |
+
+### Pane Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `minSize` | `number` | - | Minimum size for this pane |
+| `maxSize` | `number` | - | Maximum size for this pane |
+| `preferredSize` | `number \| string` | - | Preferred size (px or %) |
+| `snap` | `boolean` | `false` | Enable snapping for this pane |
+| `visible` | `boolean` | `true` | Pane visibility |
+
+### Events
+
+- `@change` - Emitted when pane sizes change
+- `@drag-start` - Emitted when drag starts
+- `@drag-end` - Emitted when drag ends  
+- `@reset` - Emitted when panes are reset
+
+## Installation
+
+```bash
+npm install vue-allotment
+```
+
+## Credits
+
+This Vue port is based on the excellent [Allotment](https://github.com/johnwalley/allotment) React library by [John Walley](https://github.com/johnwalley).

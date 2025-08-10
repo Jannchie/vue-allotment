@@ -1176,7 +1176,7 @@ export class SplitView extends EventEmitter implements Disposable {
     previous = false
 
     const collapsesUp = reverseViews
-      .map((i: any) => (previous = i.size - i.minimumSize1 > 0 || previous))
+      .map((i: any) => (previous = i.size - i.minimumSize > 0 || previous))
       .toReversed()
 
     previous = false

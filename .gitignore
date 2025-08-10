@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+*storybook.log
+
+# Storybook build outputs
+storybook-static
+
+# Default Storybook assets (can be regenerated)
+src/stories/assets
