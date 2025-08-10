@@ -14,6 +14,7 @@ export { Orientation } from './sash'
 
 // Enums and Constants
 export { LayoutPriority } from './split-view'
-export { Sizing, SplitView } from './split-view'
+export type { Sizing } from './split-view'
+export { SplitView } from './split-view'
 // Utilities
 export { setSashSize } from './utils'

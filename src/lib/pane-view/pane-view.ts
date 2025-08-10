@@ -3,6 +3,8 @@ import type { View } from '../split-view'
 import { endsWith } from '../helpers/string'
 import { LayoutPriority } from '../split-view'
 
+export type LayoutPriorityType = LayoutPriority
+
 export interface Layout {
   getPreferredSize: () => number | undefined
 }
@@ -34,14 +36,16 @@ export class ProportionLayout implements Layout {
 }
 
 export class NullLayout implements Layout {
-  public getPreferredSize() {}
+  public getPreferredSize(): number | undefined {
+    return undefined
+  }
 }
 
 export interface PaneViewOptions {
   element: HTMLElement
   minimumSize?: number
   maximumSize?: number
-  priority?: LayoutPriority
+  priority?: LayoutPriorityType
   preferredSize?: number | string
   snap?: boolean
 }
@@ -51,7 +55,7 @@ export class PaneView implements View {
   public maximumSize: number = Number.POSITIVE_INFINITY
 
   readonly element: HTMLElement
-  readonly priority?: LayoutPriority | undefined
+  readonly priority?: LayoutPriorityType | undefined
   readonly snap: boolean
 
   private layoutService: LayoutService

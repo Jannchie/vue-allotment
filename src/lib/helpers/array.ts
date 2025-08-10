@@ -31,7 +31,7 @@ export function pushToEnd<T>(arr: T[], value: T): void {
  */
 export function range(start: number, stop: number, step: number = 1): number[] {
   const n = Math.max(0, Math.ceil((stop - start) / step))
-  const range = Array.from({ length: n })
+  const range = Array.from<number>({ length: n })
 
   let i = -1
 

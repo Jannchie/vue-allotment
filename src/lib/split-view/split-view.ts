@@ -101,9 +101,9 @@ export interface SplitViewOptions {
 }
 
 export enum LayoutPriority {
-  Normal = 'NORMAL',
-  Low = 'LOW',
-  High = 'HIGH',
+  Normal,
+  Low,
+  High,
 }
 
 /**
@@ -1176,13 +1176,13 @@ export class SplitView extends EventEmitter implements Disposable {
     previous = false
 
     const collapsesUp = reverseViews
-      .map(i => (previous = i.size - i.minimumSize > 0 || previous))
+      .map((i: any) => (previous = i.size - i.minimumSize1 > 0 || previous))
       .toReversed()
 
     previous = false
 
     const expandsUp = reverseViews
-      .map(i => (previous = i.maximumSize - i.size > 0 || previous))
+      .map((i: any) => (previous = i.maximumSize - i.size > 0 || previous))
       .toReversed()
 
     let position = 0

@@ -24,13 +24,13 @@ export interface SashEvent {
 }
 
 export enum Orientation {
-  Vertical = 'VERTICAL',
-  Horizontal = 'HORIZONTAL',
+  Vertical,
+  Horizontal,
 }
 
 export enum SashState {
   /** Disable any UI interaction. */
-  Disabled = 'DISABLED',
+  Disabled,
 
   /**
    * Allow dragging down or to the right, depending on the sash orientation.
@@ -38,7 +38,7 @@ export enum SashState {
    * Some OSs allow customizing the mouse cursor differently whenever
    * some resizable component can't be any smaller, but can be larger.
    */
-  Minimum = 'MINIMUM',
+  Minimum,
 
   /**
    * Allow dragging up or to the left, depending on the sash orientation.
@@ -46,10 +46,10 @@ export enum SashState {
    * Some OSs allow customizing the mouse cursor differently whenever
    * some resizable component can't be any larger, but can be smaller.
    */
-  Maximum = 'MAXIMUM',
+  Maximum,
 
   /** Enable dragging. */
-  Enabled = 'ENABLED',
+  Enabled,
 }
 
 let globalSize = isIOS ? 20 : 8
