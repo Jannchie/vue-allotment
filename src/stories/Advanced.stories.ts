@@ -232,7 +232,7 @@ export const SimpleNestedTest: Story = {
   render: () => ({
     components: { Allotment, Pane, Content },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment vertical>
           <Pane :min-size="30">
             <Content title="Top" subtitle="Min: 30px" />

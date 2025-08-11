@@ -122,7 +122,7 @@ provide('allotment', {
 
 // Computed properties
 const childrenArray = computed(() => {
-  const slotContent = slots.default?.() || []
+  const slotContent = slots.default?.({}) || []
   const flattenVNodes = (vnodes: VNode[]): VNode[] => {
     const result: VNode[] = []
     for (const vnode of vnodes) {

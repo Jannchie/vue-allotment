@@ -18,7 +18,7 @@ export const CustomSeparator: Story = {
   render: () => ({
     components: { Allotment, Pane, Content },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <style>
           .custom-separator .allotment-separator {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);

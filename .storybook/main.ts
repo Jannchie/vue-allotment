@@ -8,11 +8,6 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-onboarding',
     '@storybook/addon-docs',
-    '@storybook/addon-controls',
-    '@storybook/addon-actions',
-    '@storybook/addon-viewport',
-    '@storybook/addon-measure',
-    '@storybook/addon-outline',
   ],
   framework: {
     name: '@storybook/vue3-vite',

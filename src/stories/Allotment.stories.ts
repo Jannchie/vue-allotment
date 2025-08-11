@@ -3,8 +3,10 @@ import { Allotment, Pane } from '../lib'
 import Content from './Content.vue'
 
 // Mock action for stories
-const action = (name: string) => (...args: any[]) => {
-  console.log(`Action: ${name}`, args)
+function action(name: string) {
+  return (...args: any[]) => {
+    console.log(`Action: ${name}`, args)
+  }
 }
 
 const meta = {
@@ -69,7 +71,7 @@ export const Simple: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane>
             <Content title="Left Panel" subtitle="Resizable pane" />
@@ -94,7 +96,7 @@ export const Vertical: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane>
             <Content title="Top Panel" subtitle="Vertical layout" />
@@ -119,7 +121,7 @@ export const MultiplePanes: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane>
             <Content title="Pane 1" subtitle="200px initial size" />
@@ -144,7 +146,7 @@ export const WithConstraints: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane :min-size="100" :max-size="300">
             <Content 
@@ -175,7 +177,7 @@ export const NoSeparator: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane>
             <Content 
@@ -206,7 +208,7 @@ export const WithSnap: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment v-bind="args">
           <Pane snap>
             <Content 

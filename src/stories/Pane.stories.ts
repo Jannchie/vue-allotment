@@ -54,7 +54,7 @@ export const WithMinSize: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -85,7 +85,7 @@ export const WithMaxSize: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -117,7 +117,7 @@ export const WithMinMaxSize: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -148,7 +148,7 @@ export const WithPreferredSizePixels: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -179,7 +179,7 @@ export const WithPreferredSizePercentage: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -210,7 +210,7 @@ export const WithSnap: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -241,7 +241,7 @@ export const HiddenPane: Story = {
       return { args }
     },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane v-bind="args">
             <Content 
@@ -272,7 +272,7 @@ export const MultipleConfiguredPanes: Story = {
   render: () => ({
     components: { Allotment, Pane, Content },
     template: `
-      <div style="height: 400px; border: 1px solid #ddd;">
+      <div style="height: 100dvh;">
         <Allotment>
           <Pane :min-size="100" :max-size="200" :preferred-size="150">
             <Content 
