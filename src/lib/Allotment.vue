@@ -414,6 +414,8 @@ function updateViews() {
 
       if (paneProps.preferredSize !== undefined && views.value[index].preferredSize !== paneProps.preferredSize) {
         views.value[index].preferredSize = paneProps.preferredSize
+        // 当 preferredSize 改变时，尝试调整到新的首选大小
+        resizeToPreferredSize(index)
       }
 
       let sizeChanged = false
