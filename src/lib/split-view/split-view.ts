@@ -1,7 +1,7 @@
 import type { Disposable } from '../helpers/disposable'
 import type { SashEvent as BaseSashEvent } from '../sash'
+import { clamp } from 'es-toolkit'
 import EventEmitter from 'eventemitter3'
-import clamp from 'lodash.clamp'
 import styles from '../allotment.module.css'
 import { pushToEnd, pushToStart, range } from '../helpers/array'
 import {

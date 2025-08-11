@@ -12,10 +12,8 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "es-toolkit": "^1.39.9",
     "eventemitter3": "^5.0.1",
-    "lodash.clamp": "^4.0.3",
-    "lodash.debounce": "^4.0.8",
-    "lodash.isequal": "^4.5.0",
     "vue": "^3.5.18"
   },
   "devDependencies": {
@@ -23,9 +21,6 @@
     "@storybook/addon-docs": "^9.1.1",
     "@storybook/addon-onboarding": "9.1.1",
     "@storybook/vue3-vite": "9.1.1",
-    "@types/lodash.clamp": "^4.0.9",
-    "@types/lodash.debounce": "^4.0.9",
-    "@types/lodash.isequal": "^4.5.8",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.33.0",

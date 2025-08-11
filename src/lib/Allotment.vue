@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VNode } from 'vue'
 import type { SplitViewOptions } from './split-view'
-import isEqual from 'lodash.isequal'
+import { isEqual } from 'es-toolkit'
 import {
   computed,
   nextTick,
@@ -195,8 +195,8 @@ function initializeSplitView() {
   }
 
   // 获取容器实际可用大小（不包括 padding 和 border）
-  const containerSize = props.vertical 
-    ? containerRef.value.clientHeight 
+  const containerSize = props.vertical
+    ? containerRef.value.clientHeight
     : containerRef.value.clientWidth
 
   // 设置 layoutService 的大小，以便百分比计算正确
@@ -447,8 +447,8 @@ function setupResizeObserver() {
 
   resizeObserver.value = new ResizeObserver(() => {
     if (containerRef.value) {
-      const size = props.vertical 
-        ? containerRef.value.clientHeight 
+      const size = props.vertical
+        ? containerRef.value.clientHeight
         : containerRef.value.clientWidth
       if (size > 0) {
         splitViewRef.value?.layout(size)
@@ -476,8 +476,8 @@ onMounted(() => {
     // 强制重新布局以确保正确的初始位置
     setTimeout(() => {
       if (containerRef.value && splitViewRef.value) {
-        const size = props.vertical 
-          ? containerRef.value.clientHeight 
+        const size = props.vertical
+          ? containerRef.value.clientHeight
           : containerRef.value.clientWidth
         if (size > 0) {
           splitViewRef.value.layout(size)

@@ -11,32 +11,32 @@ const meta = {
   argTypes: {
     vertical: {
       control: 'boolean',
-      description: 'Split direction - horizontal or vertical'
+      description: 'Split direction - horizontal or vertical',
     },
     separator: {
       control: 'boolean',
-      description: 'Whether to show separator between panes'
+      description: 'Whether to show separator between panes',
     },
     proportionalLayout: {
-      control: 'boolean', 
-      description: 'Resize each view proportionally when resizing container'
+      control: 'boolean',
+      description: 'Resize each view proportionally when resizing container',
     },
     minSize: {
       control: 'number',
-      description: 'Global minimum size for panes'
+      description: 'Global minimum size for panes',
     },
     maxSize: {
       control: 'number',
-      description: 'Global maximum size for panes'
+      description: 'Global maximum size for panes',
     },
     snap: {
       control: 'boolean',
-      description: 'Enable snap to zero size'
+      description: 'Enable snap to zero size',
     },
     defaultSizes: {
       control: 'object',
-      description: 'Initial sizes for each pane'
-    }
+      description: 'Initial sizes for each pane',
+    },
   },
   args: {
     vertical: false,
@@ -45,7 +45,7 @@ const meta = {
     minSize: 30,
     maxSize: Infinity,
     snap: false,
-  }
+  },
 } satisfies Meta<typeof Allotment>
 
 export default meta
@@ -53,7 +53,7 @@ type Story = StoryObj<typeof meta>
 
 // Simple horizontal split
 export const Simple: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -69,7 +69,7 @@ export const Simple: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -78,7 +78,7 @@ export const Vertical: Story = {
   args: {
     vertical: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -94,16 +94,16 @@ export const Vertical: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
 // Multiple panes
 export const MultiplePanes: Story = {
   args: {
-    defaultSizes: [200, 300, 150]
+    defaultSizes: [200, 300, 150],
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -122,13 +122,13 @@ export const MultiplePanes: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
 // With min/max sizes
 export const WithConstraints: Story = {
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -150,7 +150,7 @@ export const WithConstraints: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -159,7 +159,7 @@ export const NoSeparator: Story = {
   args: {
     separator: false,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -181,7 +181,7 @@ export const NoSeparator: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -190,7 +190,7 @@ export const WithSnap: Story = {
   args: {
     snap: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -212,6 +212,6 @@ export const WithSnap: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }

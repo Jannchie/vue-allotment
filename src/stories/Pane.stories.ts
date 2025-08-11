@@ -11,33 +11,33 @@ const meta = {
   argTypes: {
     minSize: {
       control: 'number',
-      description: 'Minimum size for this pane'
+      description: 'Minimum size for this pane',
     },
     maxSize: {
-      control: 'number', 
-      description: 'Maximum size for this pane'
+      control: 'number',
+      description: 'Maximum size for this pane',
     },
     preferredSize: {
       control: 'text',
-      description: 'Preferred size (number of pixels or percentage string)'
+      description: 'Preferred size (number of pixels or percentage string)',
     },
     snap: {
       control: 'boolean',
-      description: 'Enable snap to zero size for this pane'
+      description: 'Enable snap to zero size for this pane',
     },
     visible: {
       control: 'boolean',
-      description: 'Whether the pane is visible'
+      description: 'Whether the pane is visible',
     },
     className: {
       control: 'text',
-      description: 'Custom CSS class'
-    }
+      description: 'Custom CSS class',
+    },
   },
   args: {
     visible: true,
     snap: false,
-  }
+  },
 } satisfies Meta<typeof Pane>
 
 export default meta
@@ -48,7 +48,7 @@ export const WithMinSize: Story = {
   args: {
     minSize: 200,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -70,7 +70,7 @@ export const WithMinSize: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -79,7 +79,7 @@ export const WithMaxSize: Story = {
   args: {
     maxSize: 300,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -101,7 +101,7 @@ export const WithMaxSize: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -111,7 +111,7 @@ export const WithMinMaxSize: Story = {
     minSize: 150,
     maxSize: 400,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -133,7 +133,7 @@ export const WithMinMaxSize: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -142,7 +142,7 @@ export const WithPreferredSizePixels: Story = {
   args: {
     preferredSize: 250,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -164,7 +164,7 @@ export const WithPreferredSizePixels: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -173,7 +173,7 @@ export const WithPreferredSizePercentage: Story = {
   args: {
     preferredSize: '30%',
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -195,7 +195,7 @@ export const WithPreferredSizePercentage: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -204,7 +204,7 @@ export const WithSnap: Story = {
   args: {
     snap: true,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -226,7 +226,7 @@ export const WithSnap: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -235,7 +235,7 @@ export const HiddenPane: Story = {
   args: {
     visible: false,
   },
-  render: (args) => ({
+  render: args => ({
     components: { Allotment, Pane, Content },
     setup() {
       return { args }
@@ -263,7 +263,7 @@ export const HiddenPane: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }
 
@@ -294,6 +294,6 @@ export const MultipleConfiguredPanes: Story = {
           </Pane>
         </Allotment>
       </div>
-    `
+    `,
   }),
 }

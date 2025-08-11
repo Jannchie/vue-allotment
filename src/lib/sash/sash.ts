@@ -1,7 +1,7 @@
 import type { Disposable } from '../helpers/disposable'
-import EventEmitter from 'eventemitter3'
+import { debounce } from 'es-toolkit'
 
-import debounce from 'lodash.debounce'
+import EventEmitter from 'eventemitter3'
 import { isIOS, isMacintosh } from '../helpers/platform'
 import styles from './sash.module.css'
 
