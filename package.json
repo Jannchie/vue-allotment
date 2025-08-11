@@ -1,7 +1,7 @@
 {
   "name": "vue-allotment",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "description": "Vue 3 port of React Allotment - resizable split views with draggable dividers",
   "author": "jannchie",
