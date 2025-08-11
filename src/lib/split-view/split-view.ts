@@ -1155,6 +1155,18 @@ export class SplitView extends EventEmitter implements Disposable {
       }
     }
 
+    for (const index of indexes) {
+      const viewItem = this.viewItems[index]
+
+      if (viewItem.visible && viewItem.maximumSize - viewItem.minimumSize > 0) {
+        return undefined
+      }
+
+      if (!viewItem.visible && viewItem.snap) {
+        return index
+      }
+    }
+
     return undefined
   }
 

@@ -144,7 +144,7 @@ function removePane(id: number) {
       <h2>Snap to Zero</h2>
       <div class="demo-box">
         <Allotment :default-sizes="[200, 300]">
-          <Pane key="snap1" :min-size="0" :snap="true">
+          <Pane key="snap1" :min-size="100" :snap="true">
             <div class="pane-content pane-5">
               <h3>Snap Pane</h3>
               <p>This pane can snap to 0</p>
