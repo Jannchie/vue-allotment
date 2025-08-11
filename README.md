@@ -1,6 +1,9 @@
-# Allotment Vue
+# Vue Allotment
 
 A Vue 3 port of the popular React [Allotment](https://github.com/johnwalley/allotment) component library. This library provides resizable split views for Vue applications, perfect for creating complex layouts with draggable dividers.
+
+[![npm version](https://badge.fury.io/js/vue-allotment.svg)](https://badge.fury.io/js/vue-allotment)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
 
@@ -14,18 +17,19 @@ A Vue 3 port of the popular React [Allotment](https://github.com/johnwalley/allo
 ## Installation
 
 ```bash
-npm install allotment-vue
+npm install vue-allotment
 # or
-pnpm add allotment-vue
+pnpm add vue-allotment
 # or
-yarn add allotment-vue
+yarn add vue-allotment
 ```
 
 ## Quick Start
 
 ```vue
 <script setup>
-import { Allotment, Pane } from 'allotment-vue'
+import { Allotment, Pane } from 'vue-allotment'
+import 'vue-allotment/style.css'
 </script>
 
 <template>
@@ -154,8 +158,8 @@ function onReset() {
 
 ```vue
 <script setup>
-import { Allotment, Pane } from 'allotment-vue'
 import { ref } from 'vue'
+import { Allotment, Pane } from 'vue-allotment'
 
 const allotmentRef = ref()
 

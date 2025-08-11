@@ -1,0 +1,45 @@
+# Development files
+src/
+public/
+.storybook/
+stories/
+tests/
+test/
+
+# Build tools
+vite.config.ts
+tsconfig*.json
+.eslintrc*
+.prettierrc*
+playwright.config.ts
+
+# Development dependencies
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Environment files
+.env*
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation (keep README.md)
+docs/
+CONTRIBUTING.md
+CHANGELOG.md
