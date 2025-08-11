@@ -22,7 +22,7 @@ pnpm preview
 pnpm storybook
 
 # Build Storybook for production
-pnpm build-storybook
+pnpm storybook:build
 
 # Run ESLint (uses @jannchie/eslint-config)
 npx eslint src/ --ext .ts,.vue

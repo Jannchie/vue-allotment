@@ -24,12 +24,27 @@ importers:
       '@jannchie/eslint-config':
         specifier: ^3.7.0
         version: 3.7.0(@vue/compiler-sfc@3.5.18)(eslint@9.33.0)(typescript@5.9.2)
+      '@storybook/addon-actions':
+        specifier: ^9.0.8
+        version: 9.0.8
+      '@storybook/addon-controls':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@storybook/addon-docs':
         specifier: ^9.1.1
         version: 9.1.1(@types/react@19.1.9)(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))
+      '@storybook/addon-measure':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@storybook/addon-onboarding':
         specifier: 9.1.1
         version: 9.1.1(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))
+      '@storybook/addon-outline':
+        specifier: ^9.0.8
+        version: 9.0.8
+      '@storybook/addon-viewport':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@storybook/vue3-vite':
         specifier: 9.1.1
         version: 9.1.1(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1))(vue@3.5.18(typescript@5.9.2))
@@ -609,15 +624,30 @@ packages:
   '@rushstack/ts-command-line@5.0.2':
     resolution: {integrity: sha512-+AkJDbu1GFMPIU8Sb7TLVXDv/Q7Mkvx+wAjEl8XiXVVq+p1FmWW6M3LYpJMmoHNckSofeMecgWg5lfMwNAAsEQ==}
 
+  '@storybook/addon-actions@9.0.8':
+    resolution: {integrity: sha512-LFePu7PPnWN0Il/uoUpmA5T0J0C7d6haJIbg0pXrjxW2MQVSYXE4S4LSUz8fOImltBDV3xAl6tLPYHFj6VcrOA==}
+
+  '@storybook/addon-controls@9.0.8':
+    resolution: {integrity: sha512-6MY9QeBv2vNmBXH+ONmbpp/Gu/odSxriN1+BAY+il9OyXZBMq3OiDsjoH7xY5V7PGr+0XhZfOLkamvx3q+lQTg==}
+
   '@storybook/addon-docs@9.1.1':
     resolution: {integrity: sha512-CzgvTy3V5X4fe+VPkiZVwPKARlpEBDAKte8ajLAlHJQLFpADdYrBRQ0se6I+kcxva7rZQzdhuH7qjXMDRVcfnw==}
     peerDependencies:
       storybook: ^9.1.1
 
+  '@storybook/addon-measure@9.0.8':
+    resolution: {integrity: sha512-+DAsl7o8Hh4cw+U29c1+IqeLJWVu3swy/wgGhZBpIyhfz22b55cTlquEjwXRV26KBkuQBZih8XhZPU689rc7Rg==}
+
   '@storybook/addon-onboarding@9.1.1':
     resolution: {integrity: sha512-QHkirYjgHqhJMmD2riVJ4qvkwNif79phEJuMd+Zna2niT5MMkmFSd+lfLgbEYr6ufbL2OWnsoUmxRY5s3RgKQw==}
     peerDependencies:
       storybook: ^9.1.1
+
+  '@storybook/addon-outline@9.0.8':
+    resolution: {integrity: sha512-lHrm8xraDjy77zH07OsFmb7wshdwVZXw7RTub+MPo4Gql2vRxr/0cjEj9EUkeaxEyP2oQclgWBmYZvAM25vQtw==}
+
+  '@storybook/addon-viewport@9.0.8':
+    resolution: {integrity: sha512-HgIFDzNXvMx0zQBM5mhwBoAJlrF9KRlxNCZnJbqrFLCJO4Ps2PMtB0HRGHcg0gm3RLcqyps0DpiF7wll3udb7Q==}
 
   '@storybook/builder-vite@9.1.1':
     resolution: {integrity: sha512-rM0QOfykr39SFBRQnoAa5PU3xTHnJE1R5tigvjved1o7sumcfjrhqmEyAgNZv1SoRztOO92jwkTi7En6yheOKg==}
@@ -2957,6 +2987,10 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
+  '@storybook/addon-actions@9.0.8': {}
+
+  '@storybook/addon-controls@9.0.8': {}
+
   '@storybook/addon-docs@9.1.1(@types/react@19.1.9)(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))':
     dependencies:
       '@mdx-js/react': 3.1.0(@types/react@19.1.9)(react@19.1.1)
@@ -2970,9 +3004,15 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@storybook/addon-measure@9.0.8': {}
+
   '@storybook/addon-onboarding@9.1.1(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))':
     dependencies:
       storybook: 9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1))
+
+  '@storybook/addon-outline@9.0.8': {}
+
+  '@storybook/addon-viewport@9.0.8': {}
 
   '@storybook/builder-vite@9.1.1(storybook@9.1.1(@testing-library/dom@10.4.0)(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1)))(vite@7.1.1(@types/node@24.2.1)(yaml@2.8.1))':
     dependencies:

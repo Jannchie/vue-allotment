@@ -2,6 +2,11 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite'
 import { Allotment, Pane } from '../lib'
 import Content from './Content.vue'
 
+// Mock action for stories
+const action = (name: string) => (...args: any[]) => {
+  console.log(`Action: ${name}`, args)
+}
+
 const meta = {
   title: 'Basic/Allotment',
   component: Allotment,
@@ -45,6 +50,11 @@ const meta = {
     minSize: 30,
     maxSize: Infinity,
     snap: false,
+    onChange: action('change'),
+    onReset: action('reset'),
+    onDragStart: action('drag-start'),
+    onDragEnd: action('drag-end'),
+    onVisibleChange: action('visible-change'),
   },
 } satisfies Meta<typeof Allotment>
 
