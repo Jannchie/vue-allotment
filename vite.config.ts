@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       ...(isLib
         ? [
             dts({
-              include: ['src/lib/**/*'],
+              include: ['src/lib/**/*', 'src/vite-env.d.ts'],
               outDir: 'dist',
               insertTypesEntry: true,
               rollupTypes: true,
