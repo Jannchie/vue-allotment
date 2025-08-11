@@ -242,9 +242,10 @@ function initializeSplitView() {
       descriptor: {
         size: adjustedSizes.reduce((a, b) => a + b, 0),
         views: adjustedSizes.map((size, index) => {
-          const paneProps = splitViewPropsRef.get(
-            previousKeys.value[index],
-          )
+          // 使用更可靠的方式获取childKey - 从splitViewViewRef的keys
+          const keys = [...splitViewViewRef.keys()]
+          const childKey = keys[index]
+          const paneProps = splitViewPropsRef.get(childKey)
 
           const view = new PaneView(layoutService.value as LayoutService, {
             element: document.createElement('div'),

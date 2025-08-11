@@ -56,13 +56,13 @@ export const WithMinSize: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="constrained-pane" v-bind="args">
             <Content 
               title="Min Size: 200px"
               subtitle="This pane cannot be smaller than 200px"
             />
           </Pane>
-          <Pane>
+          <Pane key="flexible-pane">
             <Content 
               title="Flexible Pane"
               subtitle="No size constraints"
@@ -87,13 +87,13 @@ export const WithMaxSize: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="max-constrained" v-bind="args">
             <Content 
               title="Max Size: 300px"
               subtitle="This pane cannot be larger than 300px"
             />
           </Pane>
-          <Pane>
+          <Pane key="max-flexible">
             <Content 
               title="Flexible Pane"
               subtitle="No size constraints"
@@ -119,13 +119,13 @@ export const WithMinMaxSize: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="minmax-constrained" v-bind="args">
             <Content 
               title="Constrained Pane"
               subtitle="Min: 150px, Max: 400px"
             />
           </Pane>
-          <Pane>
+          <Pane key="minmax-flexible">
             <Content 
               title="Flexible Pane"
               subtitle="No size constraints"
@@ -150,13 +150,13 @@ export const WithPreferredSizePixels: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="preferred-px" v-bind="args">
             <Content 
               title="Preferred Size: 250px"
               subtitle="Initial size preference"
             />
           </Pane>
-          <Pane>
+          <Pane key="preferred-flexible">
             <Content 
               title="Flexible Pane"
               subtitle="Takes remaining space"
@@ -181,13 +181,13 @@ export const WithPreferredSizePercentage: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="preferred-percent" v-bind="args">
             <Content 
               title="Preferred Size: 30%"
               subtitle="Percentage of total width"
             />
           </Pane>
-          <Pane>
+          <Pane key="percent-flexible">
             <Content 
               title="Flexible Pane"
               subtitle="Takes remaining 70%"
@@ -212,13 +212,13 @@ export const WithSnap: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="snap-enabled" v-bind="args">
             <Content 
               title="Snap Enabled"
               subtitle="Drag to very small size to snap to zero"
             />
           </Pane>
-          <Pane>
+          <Pane key="snap-regular">
             <Content 
               title="Regular Pane"
               subtitle="No snap behavior"
@@ -243,19 +243,19 @@ export const HiddenPane: Story = {
     template: `
       <div style="height: 100dvh;">
         <Allotment>
-          <Pane v-bind="args">
+          <Pane key="hidden-pane" v-bind="args">
             <Content 
               title="Hidden Pane"
               subtitle="This pane is not visible"
             />
           </Pane>
-          <Pane>
+          <Pane key="visible-pane1">
             <Content 
               title="Visible Pane"
               subtitle="Only this pane is shown"
             />
           </Pane>
-          <Pane>
+          <Pane key="visible-pane2">
             <Content 
               title="Another Visible Pane"
               subtitle="This one is also shown"
